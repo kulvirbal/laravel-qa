@@ -32,17 +32,22 @@
                             <div class="media-body">
                                 <div class="d-flex align-items-center">
                                     <h3 class="mt-0">
-                                        <a href="{{ $question->user->url }}">
+                                        <a href="{{ $question->url }}">
                                             {{ $question->title }}
                                         </a>
                                     </h3>
                                     <div class="ml-auto">
-                                        <a href="{{ route('questions.edit', $question->id) }}" class="btn btn-outline-primary btn-sm"> Edit</a>
-                                        <form class="delete-form" action="{{ route('questions.destroy', $question->id) }}" method="post">
-                                            @csrf
-                                            @method('delete')
-                                            <button type="submit" class="btn btn-outline-danger btn-sm" onclick="confirm('Are you sure to delete this question?')"> Delete</button>
-                                        </form>
+                                        @if(Auth::user()->can('update-question', $question))
+                                            <a href="{{ route('questions.edit', $question->id) }}" class="btn btn-outline-primary btn-sm"> Edit</a>
+                                        @endif
+                                        
+                                        @if(Auth::user()->can('delete-question', $question))
+                                            <form class="delete-form" action="{{ route('questions.destroy', $question->id) }}" method="post">
+                                                @csrf
+                                                @method('delete')
+                                                <button type="submit" class="btn btn-outline-danger btn-sm" onclick="confirm('Are you sure to delete this question?')"> Delete</button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </div>
                                 
