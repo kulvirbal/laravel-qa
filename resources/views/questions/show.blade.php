@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <p>{{ $question->body_html }}</p>
+                    <p>{{ $question->body }}</p>
                 </div>
             </div>
         </div>

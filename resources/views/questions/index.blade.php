@@ -8,9 +8,11 @@
                 <div class="card-header">
                     <div class="d-flex align-items-center">
                         <h2>{{ __('All Questions') }}</h2>
-                        <div class="ml-auto">
-                            <a href="{{ route('questions.create') }}" class="btn btn-outline-secondary"> Ask Question</a>
-                        </div>
+                        @if(Auth::user())
+                            <div class="ml-auto">
+                                <a href="{{ route('questions.create') }}" class="btn btn-outline-secondary"> Ask Question</a>
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <div class="card-body">
@@ -23,7 +25,7 @@
                                     <strong> {{ $question->votes }}</strong> {{ Illuminate\Support\Str::plural('vote', $question->votes) }}
                                 </div>
                                 <div class="status {{ $question->status }}">
-                                    <strong> {{ $question->answers }}</strong> {{ Illuminate\Support\Str::plural('answers', $question->answers) }}
+                                    <strong> {{ $question->answers_count }}</strong> {{ Illuminate\Support\Str::plural('answer', $question->answers_count) }}
                                 </div>
                                 <div class="view">
                                     {{ $question->views ." ". Illuminate\Support\Str::plural('views', $question->views) }}
@@ -37,17 +39,17 @@
                                         </a>
                                     </h3>
                                     <div class="ml-auto">
-                                        @if(Auth::user()->can('update-question', $question))
+                                        @can('update-question', $question)
                                             <a href="{{ route('questions.edit', $question->id) }}" class="btn btn-outline-primary btn-sm"> Edit</a>
-                                        @endif
-                                        
-                                        @if(Auth::user()->can('delete-question', $question))
+                                        @endcan
+  
+                                        @can('delete-question', $question)
                                             <form class="delete-form" action="{{ route('questions.destroy', $question->id) }}" method="post">
                                                 @csrf
                                                 @method('delete')
                                                 <button type="submit" class="btn btn-outline-danger btn-sm" onclick="confirm('Are you sure to delete this question?')"> Delete</button>
                                             </form>
-                                        @endif
+                                        @endcan
                                     </div>
                                 </div>
                                 

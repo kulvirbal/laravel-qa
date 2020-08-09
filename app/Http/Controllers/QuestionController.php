@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 
 class QuestionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -102,7 +106,7 @@ class QuestionController extends Controller
         if (\Gate::denies('delete-question', $question)) {
             abort(403, 'Access Denied!');
         }
-        
+
         $question->delete();
 
         return redirect()->route('questions.index')->with('success', 'Your question has been deleted.');
