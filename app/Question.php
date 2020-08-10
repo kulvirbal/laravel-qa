@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Psy\CodeCleaner\ReturnTypePass;
+use League\CommonMark\CommonMarkConverter;
 
 class Question extends Model
 {
@@ -42,5 +43,11 @@ class Question extends Model
 
     public function answers() {
         return $this->hasMany(Answer::class);
+    }
+
+    protected function bodyHtml()
+    {
+        $markdown = new CommonMarkConverter(['allow_unsafe_links' => false]);
+        return $markdown->convertToHtml($this->body);
     }
 }

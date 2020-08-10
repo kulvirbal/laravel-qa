@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use League\CommonMark\CommonMarkConverter;
 
 class Answer extends Model
 {
@@ -28,6 +29,12 @@ class Answer extends Model
     public function getCreatedDateAttribute()
     {
         return $this->created_at->diffForHumans();
+    }
+
+    protected function bodyHtml()
+    {
+        $markdown = new CommonMarkConverter(['allow_unsafe_links' => false]);
+        return $markdown->convertToHtml($this->body);
     }
 
 }
